@@ -32,6 +32,8 @@ once in the directory, run
 Using
 ___
 
+edit what you see in the src/main.js file 
+
 react-d3 components
 
 
