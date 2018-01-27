@@ -9,6 +9,10 @@ This starter is as minimal as possible while still including Babel and Webpack.
 Setup
 ---
 
+clone this repo into your github using the terminal command `git clone https://github.com/mayakoneval/ResearchFundingDataVis`
+
+cd into it and run
+
 ```
 npm install
 ```
@@ -18,9 +22,11 @@ npm install
 Usage
 ---
 
+once in the directory, run
+
 1. `npm start`
 
-2. Open [http://localhost:3000/](http://localhost:3000/).
+2. Open [http://localhost:8080/](http://localhost:8080/).
 
 
 Using

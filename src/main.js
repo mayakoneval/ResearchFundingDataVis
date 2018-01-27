@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Bar from './BarGraph';
+import Launchpad from './Launchpad';
 
 document.addEventListener('DOMContentLoaded', function() {
   ReactDOM.render(
-    React.createElement(Bar),
+    React.createElement(Launchpad),
     document.getElementById('mount')
   );
 });
