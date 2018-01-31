@@ -35,8 +35,8 @@ once in the base directory (the directory that has all of your files, but no fil
 3. In the web development tools (in Chrome, right click and inspect) in console, you should see an array of many thousands of objects. Each of these is a row in the PDF translated into an object, some have primary sponsors and some don't, just like the pdf. I am in the process of transforming this data into something more usable. My goal is to have an array of JSON objects of Primary Sponsors with their total contributions, then work on an overall/high level sunburst chart from there
 
 
-> What does this file do? (IMPORTANT FILES TO UNDERSTAND)
-___
+What does this file do? (IMPORTANT FILES TO UNDERSTAND)
+------------------------------------------------------
 
 **Step 1** to understand the setup of this web app is to understand [this minimal react starter](https://github.com/ahfarmer/minimal-react-starter). There is a [tutorial I followed](https://www.javascriptstuff.com/build-your-own-starter/#0-intro) to set up a minimal react starter, [this github](https://github.com/ahfarmer/minimal-react-starter) is the result.
 
