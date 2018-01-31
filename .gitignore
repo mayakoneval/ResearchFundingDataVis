@@ -1,4 +1,5 @@
 node_modules
 !node_modules/react-d3
+src/data
 .DS_Store
 www/bundle.js

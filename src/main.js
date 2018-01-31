@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Launchpad from './Launchpad';
+import Launchpad from './TransformData';
 
 document.addEventListener('DOMContentLoaded', function() {
   ReactDOM.render(
