@@ -1,11 +1,22 @@
 import React from 'react';
 var d3 = require('d3');
+var PropTypes = require('prop-types');
 
 class ZoomableSunburst extends React.Component {
-
+  
   render() {
 
-    console.log("got here2");
+    var defaultProps = {
+      chartClassName: "hello"
+    };
+
+    var propTypes =  {
+        chartClassName: PropTypes.string,
+        dataProp:       PropTypes.array.isRequired,
+    };
+
+    var props = this.props;
+
     var path = {
                   stroke: '#fff'
                 };
@@ -56,7 +67,7 @@ class ZoomableSunburst extends React.Component {
     return (
         <div className="sb">
         { 
-          d3.json("https://gist.githubusercontent.com/mbostock/4348373/raw/85f18ac90409caa5529b32156aa6e71cf985263f/flare.json", function(error, root) {
+          d3.json(props.dataProp, function(error, root) {
             if (error) throw error;
               
               root = d3.hierarchy(root);
@@ -77,4 +88,5 @@ class ZoomableSunburst extends React.Component {
     );
   }
 }
+
 export default ZoomableSunburst;
