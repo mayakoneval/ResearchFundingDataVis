@@ -30,9 +30,12 @@ once in the base directory (the directory that has all of your files, but no fil
 
 1. `npm start` --> this will start a python server to host the csv and a node server to run your web app
 
-2. **Open** [http://localhost:8080/](http://localhost:8080/).
+2. You must have [this plugin downloaded](https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en) if you intend to see the data in Chrome. This is because when we host the csv on localhost using the python http server, Chrome gives us this error. `Failed to load http://localhost:8888/src/data/CSV_Research.csv: No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'http://localhost:8080' is therefore not allowed access.
+bundle.js:27676 `
 
-3. In the web development tools (in Chrome, right click and inspect) in console, you should see an array of many thousands of objects. Each of these is a row in the PDF translated into an object, some have primary sponsors and some don't, just like the pdf. I am in the process of transforming this data into something more usable. My goal is to have an array of JSON objects of Primary Sponsors with their total contributions, then work on an overall/high level sunburst chart from there
+3. **Open** [http://localhost:8080/](http://localhost:8080/).
+
+4. In the web development tools (in Chrome, right click and inspect) in console, you should see an array of many thousands of objects. Each of these is a row in the PDF translated into an object, some have primary sponsors and some don't, just like the pdf. I am in the process of transforming this data into something more usable. My goal is to have an array of JSON objects of Primary Sponsors with their total contributions, then work on an overall/high level sunburst chart from there
 
 
 What does this file do? (IMPORTANT FILES TO UNDERSTAND)
