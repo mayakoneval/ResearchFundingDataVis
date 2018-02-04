@@ -3,6 +3,9 @@ var d3 = require('d3');
 var PropTypes = require('prop-types');
 
 class ZoomableSunburst extends React.Component {
+  constructor() {
+    super();
+  }
   
   render() {
 
@@ -11,11 +14,8 @@ class ZoomableSunburst extends React.Component {
     };
 
     var propTypes =  {
-        chartClassName: PropTypes.string,
         dataProp:       PropTypes.array.isRequired,
     };
-
-    var props = this.props;
 
     var path = {
                   stroke: '#fff'
@@ -49,7 +49,6 @@ class ZoomableSunburst extends React.Component {
                 .append("g")
                 .attr("transform", "translate(" + width / 2 + "," + (height / 2) + ")");
 
-
         function click(d) {
           svg.transition()
             .duration(750)
@@ -63,30 +62,26 @@ class ZoomableSunburst extends React.Component {
             .attrTween("d", function(d) { return function() { return arc(d); }; });
         }
 
+    var root = this.props;
 
     return (
         <div className="sb">
         { 
-          d3.json(props.dataProp, function(error, root) {
-            if (error) throw error;
-              
-              root = d3.hierarchy(root);
-              root.sum(function(d) { return d.size; });
-                svg.selectAll("path")
-                    .data(partition(root).descendants())
-                    .enter().append("path")
-                    .attr("d", arc)
-                    .style("fill", function(d) { return color((d.children ? d : d.parent).data.name); })
-                    .on("click", click)
-                    .append("title")
-                    .text(function(d) { return d.data.name + "\n" + formatNumber(d.value); });
-          }),
 
+            console.log("rooot",root),
+            root.sum(function(d) { return d.size; }),
+            svg.selectAll("path")
+               .data(partition(root).descendants())
+               .enter().append("path")
+               .attr("d", arc)
+               .style("fill", function(d) { return color((d.children ? d : d.parent).data.name); })
+               .on("click", click)
+               .append("title")
+               .text(function(d) { return d.data.name + "\n" + formatNumber(d.value); }),
           d3.select(self.frameElement).style("height", height + "px")
         }
-        </div>
+       </div>
     );
   }
 }
-
 export default ZoomableSunburst;
