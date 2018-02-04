@@ -3,9 +3,6 @@ var d3 = require('d3');
 var PropTypes = require('prop-types');
 
 class ZoomableSunburst extends React.Component {
-  constructor() {
-    super();
-  }
   
   render() {
 
@@ -14,6 +11,7 @@ class ZoomableSunburst extends React.Component {
     };
 
     var propTypes =  {
+        chartClassName: PropTypes.string,
         dataProp:       PropTypes.array.isRequired,
     };
 
@@ -62,14 +60,15 @@ class ZoomableSunburst extends React.Component {
             .attrTween("d", function(d) { return function() { return arc(d); }; });
         }
 
-    var root = this.props;
 
     return (
         <div className="sb">
         { 
+          d3.json("https://gist.githubusercontent.com/mbostock/4348373/raw/85f18ac90409caa5529b32156aa6e71cf985263f/flare.json", function(error, root) {
+            if (error) throw error;
 
-            console.log("rooot",root),
-            root.sum(function(d) { return d.size; }),
+            root = d3.hierarchy(root);
+            root.sum(function(d) { return d.size; });
             svg.selectAll("path")
                .data(partition(root).descendants())
                .enter().append("path")
@@ -77,11 +76,12 @@ class ZoomableSunburst extends React.Component {
                .style("fill", function(d) { return color((d.children ? d : d.parent).data.name); })
                .on("click", click)
                .append("title")
-               .text(function(d) { return d.data.name + "\n" + formatNumber(d.value); }),
+               .text(function(d) { return d.data.name + "\n" + formatNumber(d.value); });
+          }),
+
           d3.select(self.frameElement).style("height", height + "px")
         }
-       </div>
-    );
+       </div>);
   }
 }
 export default ZoomableSunburst;
