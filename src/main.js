@@ -5,6 +5,11 @@ import ZoomableSunburst from './ZoomableSunburst';
 var d3 = require('d3');
 
 document.addEventListener('DOMContentLoaded', function() {
+
+      // this is where the csv parsing happens - then i call a function from 
+      // src/TransformData that makes it a array of objects 
+      // then this render method shows us the ZoomableSunburst component and we 
+      // pass is the structuredData array as a prop
                               
       d3.csv("http://localhost:8888/src/data/CSV_Research.csv", function(data) {
           console.log("DATA OBJ", structurePrimarySponsorData(data));

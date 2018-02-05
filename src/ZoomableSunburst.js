@@ -60,27 +60,52 @@ class ZoomableSunburst extends React.Component {
             .attrTween("d", function(d) { return function() { return arc(d); }; });
         }
 
+        var dataProp = this.props.dataProp;
+
 
     return (
         <div className="sb">
-        { 
-          d3.json("https://gist.githubusercontent.com/mbostock/4348373/raw/85f18ac90409caa5529b32156aa6e71cf985263f/flare.json", function(error, root) {
-            if (error) throw error;
+          <div>
+          { 
+              console.log("initialDP:", dataProp),
+              dataProp = d3.hierarchy(dataProp),
+              console.log("after hierarchyDP:", dataProp),
+              dataProp.sum(function(d) { return d.size; }),
+              console.log("afterSumDP:", dataProp),
+              svg.selectAll("path")
+                .data(partition(dataProp).descendants())
+                .enter().append("path")
+                .attr("d", arc)
+                .style("fill", function(d) { return color((d.children ? d : d.parent).data.name); })
+                .on("click", click)
+                .append("title")
+                .text(function(d) { return d.data.name + "\n" + formatNumber(d.value); }),
 
-            root = d3.hierarchy(root);
-            root.sum(function(d) { return d.size; });
-            svg.selectAll("path")
-               .data(partition(root).descendants())
-               .enter().append("path")
-               .attr("d", arc)
-               .style("fill", function(d) { return color((d.children ? d : d.parent).data.name); })
-               .on("click", click)
-               .append("title")
-               .text(function(d) { return d.data.name + "\n" + formatNumber(d.value); });
-          }),
+            d3.select(self.frameElement).style("height", height + "px")
+          }
+          </div>
+          <div>
+          { 
+            d3.json("https://gist.githubusercontent.com/mbostock/4348373/raw/85f18ac90409caa5529b32156aa6e71cf985263f/flare.json", function(error, root) {
+              if (error) throw error;
+              console.log("initialR:", root),
+              root = d3.hierarchy(root),
+              console.log("afterHierarchyR:", root),
+              root.sum(function(d) { return d.size; }),
+              console.log("afterSumR:", root),
+              svg.selectAll("path")
+                .data(partition(root).descendants())
+                .enter().append("path")
+                .attr("d", arc)
+                .style("fill", function(d) { return color((d.children ? d : d.parent).data.name); })
+                .on("click", click)
+                .append("title")
+                .text(function(d) { return d.data.name + "\n" + formatNumber(d.value); });
+            }),
 
-          d3.select(self.frameElement).style("height", height + "px")
-        }
+            d3.select(self.frameElement).style("height", height + "px")
+          }
+          </div>
        </div>);
   }
 }
