@@ -7,65 +7,147 @@ var d3 = require('d3');
 export const  structurePrimarySponsorData =(data)=> {
     var structuredData = [];
     var total = 0;
-    var data_obj_alphabet = [ { "Primary_Sponsor": "",
-                    "Total_From_Sponsor": "",
-                    "Direct_Sponsors": {
-                        "ex1": "", 
-                        "ex2": ""
-                      }
-                    } ];
+    var data_obj_alphabet = { "name": "Primary Sponsors",
+                              "children": [
+                                  {}
+                               ]
+                            };
 
-    var data_obj_sorted = [ { "Primary_Sponsor": "",
-                    "Total_From_Sponsor": "",
-                    "Direct_Sponsors": {
-                        "ex1": "", 
-                        "ex2": ""
-                      }
-                    } ];
-
-    var data_obj_dept = [ { "Department": "",
-                            "Total": "" } ];
+    var data_obj_sorted = { "name": "Primary Sponsors",
+                            "children": [
+                              {}
+                             ]
+                            };
+    var data_by_name = { "name": "Names",
+                         "children": [] };
 
     var indexPrevSponsor = 0;
-
+    var indexPrevDirect = 0;
 
     for(var i = 0; i<data.length; i++) {
+      var repeatName = false;
       var row = data[i];
+      if(row.Supervisor != "") {
+        for(var p = 0; p<data_by_name.children.length; p++) {
+          if(row.Supervisor == data_by_name.children[p].name) {
+            data_by_name.children[p].size += parseInt(row.Unexpended_Balance);
+            repeatName = true;
+          }
+        }
+        if(!repeatName) {
+          data_by_name.children.push({"name": row.Supervisor,
+                                    "size": parseInt(row.Unexpended_Balance)});
+        }
+      }
+
       if(row.Primary_Sponsor != "") {
-        data_obj_alphabet.push({ "Primary_Sponsor": cleanAndEdit(row.Primary_Sponsor),
-                        "Total_From_Sponsor": "",
-                        "Direct_Sponsors": {}});
+        data_obj_alphabet.children.push({ "Primary_Sponsor": cleanAndEdit(row.Primary_Sponsor),
+                                          "Total_From_Sponsor": "",
+                                          "name": "Direct Sponsors",
+                                          "children": [{}]});
         indexPrevSponsor += 1;
+        indexPrevDirect = 0;
       }
       else if(row.Direct_Sponsors != "") {
         if(row.Direct_Sponsors == "Total by Primary Sponsor") {
-          data_obj_alphabet[indexPrevSponsor].Total_From_Sponsor = parseInt(row.Unexpended_Balance);
+          data_obj_alphabet.children[indexPrevSponsor].size = parseInt(row.Unexpended_Balance);
+          data_obj_alphabet.children[indexPrevSponsor].Total_From_Sponsor = parseInt(row.Unexpended_Balance);
           total += parseInt(row.Auth_Total);
+          indexPrevDirect = 0;
         }
         else {
-          data_obj_alphabet[indexPrevSponsor].Direct_Sponsors[row.Direct_Sponsors] = parseInt(row.Unexpended_Balance);
+          //data_obj_alphabet.children[indexPrevSponsor].children = 
+          //debugger;
+          data_obj_alphabet.children[indexPrevSponsor].children[indexPrevDirect] = {};
+          data_obj_alphabet.children[indexPrevSponsor].children[indexPrevDirect]["Direct_Sponsor"] = row.Direct_Sponsors;
+          data_obj_alphabet.children[indexPrevSponsor].children[indexPrevDirect].size = parseInt(row.Unexpended_Balance);
+          indexPrevDirect += 1;
         }
       }
     }
 
     data_obj_sorted = sortByTotal(data_obj_alphabet);
-    //console.log(data_obj_alphabet);
-    //console.log(data_obj_sorted);
+    //console.log("unsorted", data_obj_alphabet);
+    //console.log("sorted", data_obj_sorted);
     //console.log(total);
-    return ({"name": "Research Data",
-            "children": data_obj_sorted});
+    var finalTwoDataObjs = [data_obj_sorted, data_by_name];
+    return (finalTwoDataObjs);
 }
+
+export const structureDepartmentData =(deptData, nameToAmount)=> {
+    // this data comes in as a JSON File, parsing will be a little different
+
+    var structuredData = [];
+    var total = 0;
+
+    var data_obj_dept = { "name": "Departments",
+                            "children": [
+                             ]
+                            };
+
+    var departments = [];
+
+    var indexPrevDepartment = 0;
+    for(var i = 0; i<deptData.length; i++) {
+      var dept = deptData[i].department;
+      var row = deptData[i];
+      if(dept != "") {
+        if(departments.indexOf(dept) == -1) {
+          departments.push(dept);
+          data_obj_dept.children.push({ "Department": dept,
+                                            "name": "Names",
+                                            "children": []});
+        }
+        //console.log(data_obj_dept);
+        for(var j = 0; j<1000; j++) {
+          //data_obj_dept.children.length
+          if(data_obj_dept.children[j].Department == dept) {
+            var nameSize = 0;
+            for(var y = 0; y<nameToAmount.children.length; y++) {
+              var nameStr = nameToAmount.children[y].name;
+              var firstName = nameStr.substring(0,nameStr.indexOf('/')-1);
+              var lastName = nameStr.substring(nameStr.indexOf('/')+1);
+              var prettyName = lastName+" "+firstName;
+              if(prettyName == row.name) {
+                //console.log("hit the pretty equalizier");
+                //console.log("prettyName", prettyName);
+                //console.log("row.name", row.name);
+                nameSize = nameToAmount.children[y].size;
+                break;
+              }
+            }
+            data_obj_dept.children[j].children.push({ "name": row.name,
+                                                      "email": row.email,
+                                                      "phone": row.phone,
+                                                      "address": row.address,
+                                                      "title": row.title,
+                                                      "url": row.url,
+                                                      "size": nameSize
+                                                      });
+            break;
+          }
+        }
+
+      }
+    }
+
+    console.log("finally", data_obj_dept);
+    //console.log(total);
+    return (data_obj_dept);
+}
+
 
 function cleanAndEdit(s) {
   return s.replace(/([\n\r])/g, ' ');
 }
 
 function sortByTotal(arr) {
-  var newArr = arr.slice();
+  var newArr = arr.children.slice();
   newArr.sort(function(a, b) {
-    return b.Total_From_Sponsor - a.Total_From_Sponsor;
+    return b.size - a.size;
   });
-  return newArr;
+  return ({"name": "sponsors",
+          "children": newArr});
 }
 
 function mapToDepartment(arr) {

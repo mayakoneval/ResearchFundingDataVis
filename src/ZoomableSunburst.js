@@ -6,6 +6,8 @@ class ZoomableSunburst extends React.Component {
   
   render() {
 
+    var colorCodes = ["#fb7200", "#ee4e17", "#f93737", "#c30505", "#f4980a"];
+
     var defaultProps = {
       chartClassName: "hello"
     };
@@ -16,7 +18,7 @@ class ZoomableSunburst extends React.Component {
     };
 
     var path = {
-                  stroke: '#fff'
+                  stroke: '#000'
                 };
     var width = 960,
         height = 700,
@@ -30,7 +32,7 @@ class ZoomableSunburst extends React.Component {
     var y = d3.scaleSqrt()
               .range([0, radius]);
 
-    var color = d3.scaleOrdinal(d3.schemeCategory20);
+    var color = d3.scaleOrdinal(d3.schemeCategory10);
 
     var partition = d3.partition();
 
@@ -84,29 +86,7 @@ class ZoomableSunburst extends React.Component {
             d3.select(self.frameElement).style("height", height + "px")
           }
           </div>
-          <div>
-          { 
-            d3.json("https://gist.githubusercontent.com/mbostock/4348373/raw/85f18ac90409caa5529b32156aa6e71cf985263f/flare.json", function(error, root) {
-              if (error) throw error;
-              console.log("initialR:", root),
-              root = d3.hierarchy(root),
-              console.log("afterHierarchyR:", root),
-              root.sum(function(d) { return d.size; }),
-              console.log("afterSumR:", root),
-              svg.selectAll("path")
-                .data(partition(root).descendants())
-                .enter().append("path")
-                .attr("d", arc)
-                .style("fill", function(d) { return color((d.children ? d : d.parent).data.name); })
-                .on("click", click)
-                .append("title")
-                .text(function(d) { return d.data.name + "\n" + formatNumber(d.value); });
-            }),
-
-            d3.select(self.frameElement).style("height", height + "px")
-          }
-          </div>
-       </div>);
+        </div>);
   }
 }
 export default ZoomableSunburst;

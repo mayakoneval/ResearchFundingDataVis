@@ -1,5 +1,7 @@
 node_modules
+unessasary
 !node_modules/react-d3
 src/data
 .DS_Store
 www/bundle.js
+npm-debug.log
