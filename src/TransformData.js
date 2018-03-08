@@ -104,6 +104,8 @@ export const structureDepartmentData =(deptData, nameToAmount)=> {
           if(data_obj_dept.children[j].Department == dept) {
             var nameSize = 0;
             for(var y = 0; y<nameToAmount.children.length; y++) {
+              //This is where I parse the name from the CSV and match to the JSON !! might have issues
+              //TODO: Edit this parsing to be 100% accurate, find out where things go wrong
               var nameStr = nameToAmount.children[y].name;
               var firstName = nameStr.substring(0,nameStr.indexOf('/')-1);
               var lastName = nameStr.substring(nameStr.indexOf('/')+1);
