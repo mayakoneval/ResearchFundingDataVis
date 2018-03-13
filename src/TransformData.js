@@ -7,13 +7,13 @@ var d3 = require('d3');
 export const  structurePrimarySponsorData =(data)=> {
     var structuredData = [];
     var total = 0;
-    var data_obj_alphabet = { "name": "Primary Sponsors",
+    var data_obj_alphabet = { "name": "Primary",
                               "children": [
                                   {}
                                ]
                             };
 
-    var data_obj_sorted = { "name": "Primary Sponsors",
+    var data_obj_sorted = { "name": "Primary",
                             "children": [
                               {}
                              ]
@@ -41,9 +41,8 @@ export const  structurePrimarySponsorData =(data)=> {
       }
 
       if(row.Primary_Sponsor != "") {
-        data_obj_alphabet.children.push({ "Primary_Sponsor": cleanAndEdit(row.Primary_Sponsor),
+        data_obj_alphabet.children.push({ "name": cleanAndEdit(row.Primary_Sponsor),
                                           "Total_From_Sponsor": "",
-                                          "name": "Direct Sponsors",
                                           "children": [{}]});
         indexPrevSponsor += 1;
         indexPrevDirect = 0;
@@ -94,14 +93,13 @@ export const structureDepartmentData =(deptData, nameToAmount)=> {
       if(dept != "") {
         if(departments.indexOf(dept) == -1) {
           departments.push(dept);
-          data_obj_dept.children.push({ "Department": dept,
-                                            "name": "Names",
+          data_obj_dept.children.push({ "name": dept,
                                             "children": []});
         }
         //console.log(data_obj_dept);
         for(var j = 0; j<1000; j++) {
           //data_obj_dept.children.length
-          if(data_obj_dept.children[j].Department == dept) {
+          if(data_obj_dept.children[j].name == dept) {
             var nameSize = 0;
             for(var y = 0; y<nameToAmount.children.length; y++) {
               //This is where I parse the name from the CSV and match to the JSON !! might have issues

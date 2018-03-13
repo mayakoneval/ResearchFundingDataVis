@@ -1,4 +1,5 @@
 const path = require('path');
+//const webpack = require('webpack');
 
 module.exports = {
   context: path.join(__dirname, 'src'),
@@ -17,5 +18,5 @@ module.exports = {
         use: ['babel-loader'],
       },
     ],
-  },
+  }
 };

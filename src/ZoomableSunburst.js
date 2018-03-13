@@ -6,6 +6,8 @@ class ZoomableSunburst extends React.Component {
   
   render() {
 
+    window.D3 = d3;
+
     var colorCodes = ["#fb7200", "#ee4e17", "#f93737", "#c30505", "#f4980a"];
 
     var defaultProps = {
@@ -69,11 +71,8 @@ class ZoomableSunburst extends React.Component {
         <div className="sb">
           <div>
           { 
-              console.log("initialDP:", dataProp),
               dataProp = d3.hierarchy(dataProp),
-              console.log("after hierarchyDP:", dataProp),
               dataProp.sum(function(d) { return d.size; }),
-              console.log("afterSumDP:", dataProp),
               svg.selectAll("path")
                 .data(partition(dataProp).descendants())
                 .enter().append("path")
