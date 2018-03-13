@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {structurePrimarySponsorData} from './TransformData';
 import {structureDepartmentData} from './TransformData';
 import ZoomableSunburst from './ZoomableSunburst';
+import Sankey from './Sankey';
 var d3 = require('d3');
 //const fs = require('fs');
 
@@ -13,6 +14,14 @@ document.addEventListener('DOMContentLoaded', function() {
       // then this render method shows us the ZoomableSunburst component and we 
       // pass is the structuredData array as a prop
       var nameData;
+      d3.csv("/data/CSV_Research.csv", function(data) {
+            ReactDOM.render(
+              <Sankey 
+                  dataProp = {data}
+                  />,
+              document.getElementById('mount')
+            );
+      });
 
       d3.csv("/data/CSV_Research.csv", function(data) {
           var twoObjs = structurePrimarySponsorData(data);
@@ -52,6 +61,8 @@ document.addEventListener('DOMContentLoaded', function() {
             );
 
           });
+
+        
 
           ReactDOM.render(
             <ZoomableSunburst
